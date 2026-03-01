@@ -381,8 +381,7 @@ body {
   z-index: 0;
 }
 
-/* Lightning overlay for dramatic flashes */
-.lightning-overlay {
+.lightings-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -395,7 +394,7 @@ body {
               linear-gradient(180deg, rgba(255,255,255,0.06), rgba(220,230,255,0.02));
 }
 
-.lightning-overlay.flash {
+.lightings-overlay.flash {
   animation: lightning-flash 380ms ease-out 1;
 }
 

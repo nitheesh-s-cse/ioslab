@@ -12,6 +12,19 @@ interface CodeBlockProps {
 export default function CodeBlock({ code, filename, showLineNumbers = false, isOutput = false }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
+  const handleDownload = () => {
+    const name = filename || (isOutput ? 'output.txt' : 'code.txt');
+    const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
@@ -30,7 +43,7 @@ export default function CodeBlock({ code, filename, showLineNumbers = false, isO
     >
       {/* Header Bar */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 border-b border-white/5 bg-white/[0.02]">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div className="flex gap-1 sm:gap-1.5 flex-shrink-0">
             <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#ff5f57]/80" />
             <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#febc2e]/80" />
@@ -38,26 +51,42 @@ export default function CodeBlock({ code, filename, showLineNumbers = false, isO
           </div>
           <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500 font-mono truncate">
             <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-            <span className="truncate">{filename || (isOutput ? 'output' : 'terminal')}</span>
+            <span
+              onClick={filename ? handleDownload : undefined}
+              role={filename ? 'link' : undefined}
+              className={`truncate ${filename ? 'cursor-pointer hover:text-accent-cyan' : ''}`}
+            >
+              {filename || (isOutput ? 'output' : 'terminal')}
+            </span>
           </div>
         </div>
         {!isOutput && (
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-gray-500 hover:text-accent-cyan transition-colors px-1.5 sm:px-2 py-1 rounded-md hover:bg-white/5 flex-shrink-0 ml-2"
-          >
-            {copied ? (
-              <>
-                <svg className="w-3 h-3 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                <span className="text-accent-green hidden xs:inline">Copied!</span>
-              </>
-            ) : (
-              <>
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                <span className="hidden sm:inline opacity-0 group-hover:opacity-100 transition-opacity">Copy</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-2 ml-2">
+            <button
+              onClick={handleCopy}
+              className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-gray-500 hover:text-accent-cyan transition-colors px-1.5 sm:px-2 py-1 rounded-md hover:bg-white/5 flex-shrink-0"
+            >
+              {copied ? (
+                <>
+                  <svg className="w-3 h-3 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  <span className="text-accent-green hidden xs:inline">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                  <span className="hidden sm:inline opacity-0 group-hover:opacity-100 transition-opacity">Copy</span>
+                </>
+              )}
+            </button>
+            <button
+              onClick={handleDownload}
+              title={filename ? `Download ${filename}` : 'Download code'}
+              className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500 hover:text-accent-cyan transition-colors px-1.5 sm:px-2 py-1 rounded-md hover:bg-white/5 flex-shrink-0"
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l4-4m-4 4-4-4M21 21H3" /></svg>
+              <span className="hidden sm:inline opacity-0 group-hover:opacity-100 transition-opacity">Download</span>
+            </button>
+          </div>
         )}
       </div>
 

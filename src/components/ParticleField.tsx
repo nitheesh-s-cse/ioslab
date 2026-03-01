@@ -161,9 +161,9 @@ export default function ParticleField() {
 
     animate();
 
-    // Randomly trigger lightning flashes
+    // Randomly trigger lightings flashes (less frequent for performance)
     const flashTimer = setInterval(() => {
-      if (Math.random() < 0.04) {
+      if (Math.random() < 0.02) {
         // trigger overlay flash
         const el = overlayRef.current;
         if (el) {
@@ -179,17 +179,17 @@ export default function ParticleField() {
         const startX = Math.random() * canvas.width;
         let x = startX;
         let y = -10;
-        const steps = 8 + Math.floor(Math.random() * 6);
+        const steps = 4 + Math.floor(Math.random() * 5); // fewer segments
         for (let i = 0; i < steps; i++) {
-          x += (Math.random() - 0.5) * (canvas.width * 0.12);
-          y += canvas.height / (steps + 1) + (Math.random() - 0.5) * 50;
+          x += (Math.random() - 0.5) * (canvas.width * 0.08);
+          y += canvas.height / (steps + 1) + (Math.random() - 0.5) * 30;
           segs.push([Math.max(0, Math.min(canvas.width, x)), Math.max(0, Math.min(canvas.height, y))]);
         }
         boltRef.current.segments = segs;
-        boltRef.current.alpha = 1;
+        boltRef.current.alpha = 0.95;
         boltRef.current.active = true;
       }
-    }, 600);
+    }, 1200);
 
     return () => {
       cancelAnimationFrame(animRef.current);
@@ -207,7 +207,7 @@ export default function ParticleField() {
         className="particle-field"
         style={{ opacity: 0.6 }}
       />
-      <div ref={overlayRef} className="lightning-overlay" aria-hidden />
+      <div ref={overlayRef} className="lightings-overlay" aria-hidden />
     </>
   );
 }
