@@ -253,12 +253,155 @@ Go to this link:
 
 ---
 
-## 🔄 Want to Update the Website Later?
+## 🔄 HOW TO UPDATE AFTER MAKING CHANGES
 
-After making changes, just run:
+You changed a file? Follow these steps to make it live again.
+
+---
+
+### ✏️ STEP A: Save Your Changed File
+
+After you edit any file (like `src/App.tsx`, `src/components/Hero.tsx`, etc.), **save it** (Ctrl + S).
+
+---
+
+### ✏️ STEP B: Open Terminal in Your Project Folder
+
+Open **CMD** or **Terminal** and go inside your project folder:
+
+```
+cd ioslab
+```
+
+---
+
+### ✏️ STEP C: Check What You Changed
+
+Run this command to see which files you changed:
+
+```
+git status
+```
+
+It will show files in **red** — those are your changes. ✅
+
+---
+
+### ✏️ STEP D: Add All Changes
+
+Run this command:
+
+```
+git add .
+```
+
+This tells Git: "I want to save ALL my changes."
+
+---
+
+### ✏️ STEP E: Commit (Save a Snapshot)
+
+Run this command:
+
+```
+git commit -m "updated website"
+```
+
+You can change the message inside quotes to anything you want. Examples:
+
+```
+git commit -m "changed heading color"
+```
+
+```
+git commit -m "fixed typo in step 3"
+```
+
+```
+git commit -m "added new section"
+```
+
+✅ Your changes are now saved locally.
+
+---
+
+### ✏️ STEP F: Push to GitHub
+
+Run this command:
+
+```
+git push origin main
+```
+
+✅ Your code on GitHub is now updated.
+
+---
+
+### ✏️ STEP G: Deploy the Updated Website
+
+Run this command:
 
 ```
 npm run deploy
 ```
 
-That's it. Changes will be live in 1-2 minutes. ✅
+⏳ Wait for it to finish. It will say `Published` at the end.
+
+✅ Your live website is now updated!
+
+---
+
+### 🎯 SHORT VERSION (After First Time)
+
+Once you've done it once, just run these **4 commands** every time you make a change:
+
+```
+git add .
+```
+
+```
+git commit -m "updated website"
+```
+
+```
+git push origin main
+```
+
+```
+npm run deploy
+```
+
+That's it! Your website will update in 1-2 minutes. 🎉
+
+---
+
+### 📝 QUICK EXAMPLE
+
+Let's say you changed the heading in `Hero.tsx`:
+
+1. Save the file (Ctrl + S)
+2. Open terminal in project folder
+3. Run:
+
+```
+git add .
+git commit -m "changed heading text"
+git push origin main
+npm run deploy
+```
+
+4. Wait 1-2 minutes
+5. Open 👉 https://nitheesh-s-cse.github.io/ioslab/
+6. See your changes live! 🎉
+
+---
+
+### ⚠️ COMMON MISTAKES
+
+| Mistake | Fix |
+|---------|-----|
+| Forgot `git add .` | Run `git add .` before commit |
+| Typed wrong commit message | Doesn't matter, any message works |
+| `git push` asks for password | Use your GitHub token (see Step 11 above) |
+| Website not updating | Clear browser cache: Ctrl + Shift + R |
+| `npm run deploy` shows error | Run `npm run build` first to check for code errors |

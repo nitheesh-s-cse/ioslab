@@ -26,35 +26,35 @@ export default function CodeBlock({ code, filename, showLineNumbers = false, isO
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className="code-block rounded-xl overflow-hidden my-4 group hover:border-accent-cyan/15 transition-all duration-500"
+      className="code-block rounded-lg sm:rounded-xl overflow-hidden my-3 sm:my-4 group hover:border-accent-cyan/15 transition-all duration-500"
     >
       {/* Header Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-white/[0.02]">
-        <div className="flex items-center gap-3">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-[#ff5f57]/80 hover:bg-[#ff5f57] transition-colors cursor-default" />
-            <div className="w-3 h-3 rounded-full bg-[#febc2e]/80 hover:bg-[#febc2e] transition-colors cursor-default" />
-            <div className="w-3 h-3 rounded-full bg-[#28c840]/80 hover:bg-[#28c840] transition-colors cursor-default" />
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 border-b border-white/5 bg-white/[0.02]">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex gap-1 sm:gap-1.5 flex-shrink-0">
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#ff5f57]/80" />
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#febc2e]/80" />
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#28c840]/80" />
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500 font-mono">
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-            <span>{filename || (isOutput ? 'output' : 'terminal')}</span>
+          <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500 font-mono truncate">
+            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <span className="truncate">{filename || (isOutput ? 'output' : 'terminal')}</span>
           </div>
         </div>
         {!isOutput && (
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-accent-cyan transition-colors px-2 py-1 rounded-md hover:bg-white/5"
+            className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-gray-500 hover:text-accent-cyan transition-colors px-1.5 sm:px-2 py-1 rounded-md hover:bg-white/5 flex-shrink-0 ml-2"
           >
             {copied ? (
               <>
                 <svg className="w-3 h-3 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                <span className="text-accent-green">Copied!</span>
+                <span className="text-accent-green hidden xs:inline">Copied!</span>
               </>
             ) : (
               <>
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity">Copy</span>
+                <span className="hidden sm:inline opacity-0 group-hover:opacity-100 transition-opacity">Copy</span>
               </>
             )}
           </button>
@@ -62,12 +62,12 @@ export default function CodeBlock({ code, filename, showLineNumbers = false, isO
       </div>
 
       {/* Code Content */}
-      <div className="p-4 overflow-x-auto">
-        <pre className="text-sm leading-relaxed">
+      <div className="p-3 sm:p-4 overflow-x-auto">
+        <pre className="text-xs sm:text-sm leading-relaxed">
           {lines.map((line, i) => (
             <div key={i} className="flex">
               {showLineNumbers && (
-                <span className="select-none text-gray-600 w-8 text-right mr-4 flex-shrink-0 text-xs leading-relaxed">
+                <span className="select-none text-gray-600 w-6 sm:w-8 text-right mr-2 sm:mr-4 flex-shrink-0 text-[10px] sm:text-xs leading-relaxed">
                   {i + 1}
                 </span>
               )}

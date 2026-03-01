@@ -26,6 +26,7 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: #1e2035 #05050a;
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -396,4 +397,79 @@ kbd {
 kbd:hover {
   border-color: rgba(34,211,238,0.3) !important;
   box-shadow: 0 0 12px rgba(34,211,238,0.15);
+}
+
+/* ─────────────────────────────── */
+/* ── MOBILE-SPECIFIC OVERRIDES ── */
+/* ─────────────────────────────── */
+
+@media (max-width: 639px) {
+  /* Reduce hero glow sizes for mobile */
+  .hero-glow {
+    background: radial-gradient(ellipse 350px 250px at 50% 0%, rgba(34, 211, 238, 0.06), transparent);
+  }
+
+  .hero-glow-2 {
+    background: radial-gradient(ellipse 250px 200px at 30% 50%, rgba(168, 85, 247, 0.03), transparent);
+  }
+
+  .hero-glow-3 {
+    background: radial-gradient(ellipse 250px 200px at 70% 60%, rgba(59, 130, 246, 0.03), transparent);
+  }
+
+  /* Disable heavy animations on mobile for perf */
+  .aurora-bg {
+    animation-duration: 60s;
+  }
+
+  .code-block::after {
+    display: none;
+  }
+
+  /* Reduce grid pattern density */
+  .scan-line {
+    animation-duration: 12s;
+  }
+
+  /* Ensure code doesn't overflow */
+  pre {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
+
+  /* Make KBD less spaced */
+  kbd {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Extra small phones */
+  .glass-card {
+    padding: 12px !important;
+  }
+}
+
+/* Touch-friendly tap targets */
+@media (hover: none) {
+  .glass-card:hover {
+    border-color: rgba(34, 211, 238, 0.06);
+    box-shadow: none;
+  }
+
+  .glass-card:active {
+    border-color: rgba(34, 211, 238, 0.15);
+    box-shadow: 
+      0 0 30px rgba(34, 211, 238, 0.03),
+      0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-card-glow:hover::after {
+    opacity: 0;
+  }
+
+  .glass-card-glow:active::after {
+    opacity: 1;
+  }
 }

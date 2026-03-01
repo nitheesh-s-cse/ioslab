@@ -25,6 +25,8 @@ export default function ParticleField() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const isMobile = window.innerWidth < 768;
+
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -32,24 +34,39 @@ export default function ParticleField() {
     resize();
     window.addEventListener('resize', resize);
 
-    // Create particles
-    const count = Math.min(80, Math.floor(window.innerWidth / 20));
+    // Fewer particles on mobile for performance
+    const count = isMobile
+      ? Math.min(25, Math.floor(window.innerWidth / 20))
+      : Math.min(80, Math.floor(window.innerWidth / 20));
+
     particles.current = Array.from({ length: count }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 2 + 0.5,
-      speedX: (Math.random() - 0.5) * 0.3,
-      speedY: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * (isMobile ? 1.5 : 2) + 0.5,
+      speedX: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.3),
+      speedY: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.3),
       opacity: Math.random() * 0.5 + 0.1,
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: Math.random() * 0.02 + 0.005,
-      hue: Math.random() > 0.5 ? 187 : 260, // cyan or purple
+      hue: Math.random() > 0.5 ? 187 : 260,
     }));
 
     const handleMouse = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
     };
+
+    // Touch support for mobile
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouse.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    };
+
     window.addEventListener('mousemove', handleMouse);
+    window.addEventListener('touchmove', handleTouch, { passive: true });
+
+    const connectionDist = isMobile ? 80 : 120;
+    const mouseDist = isMobile ? 100 : 150;
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -62,8 +79,8 @@ export default function ParticleField() {
         const dx = mouse.current.x - p.x;
         const dy = mouse.current.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
-          const force = (150 - dist) / 150;
+        if (dist < mouseDist) {
+          const force = (mouseDist - dist) / mouseDist;
           p.x -= (dx / dist) * force * 0.5;
           p.y -= (dy / dist) * force * 0.5;
         }
@@ -91,17 +108,19 @@ export default function ParticleField() {
         ctx.fillStyle = `hsla(${p.hue}, 80%, 75%, ${pulseOpacity * 0.8})`;
         ctx.fill();
 
-        // Draw connections
-        for (let j = i + 1; j < particles.current.length; j++) {
-          const p2 = particles.current[j];
-          const d = Math.sqrt((p.x - p2.x) ** 2 + (p.y - p2.y) ** 2);
-          if (d < 120) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `hsla(187, 70%, 60%, ${(1 - d / 120) * 0.08})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+        // Draw connections — skip on very small screens for perf
+        if (!isMobile || count <= 15) {
+          for (let j = i + 1; j < particles.current.length; j++) {
+            const p2 = particles.current[j];
+            const d = Math.sqrt((p.x - p2.x) ** 2 + (p.y - p2.y) ** 2);
+            if (d < connectionDist) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `hsla(187, 70%, 60%, ${(1 - d / connectionDist) * 0.08})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       });
@@ -115,6 +134,7 @@ export default function ParticleField() {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouse);
+      window.removeEventListener('touchmove', handleTouch);
     };
   }, []);
 
